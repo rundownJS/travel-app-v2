@@ -4415,7 +4415,7 @@ const generateHotelsContent = () =>{
     const citySearch = async (cityCode) =>{
         const request = await fetch(`https://api.api-ninjas.com/v1/city?name=${cityCode}&limit=20`, {
             headers: {
-                'X-Api-Key': 'HK8cAjtwpCwNkZ/zcSHg8w==PhiE8l5yLKdgG0D8'
+                'X-Api-Key': 'ms8RqOGfUGGtDh0DlpcY1g==Jth5NhF3AhqmYlOP'
             }
         })
 
@@ -4443,7 +4443,15 @@ const generateHotelsContent = () =>{
 
         window.addEventListener("click", ()=>{
             staysDropdown.style.display = "none"
+            
+            if(placeError){
+                staysErrorDiv.style.display = "block"
+            }else{
+                staysErrorDiv.style.display = "none"
+            }
         })
+
+        staysErrorDiv.style.display = "none"
     })
 
     staysDropdown.addEventListener("click", (e)=>{
@@ -4476,6 +4484,8 @@ const generateHotelsContent = () =>{
                         staysDropdown.style.display = "none" 
                         const staysSpan = document.querySelector(".stays-span").textContent = cityResults[i].name
                         calendar.style.display = "flex"
+                        
+                        placeError = false
 
                         const displayingCalendar = () =>{
                             if(new Date().getMonth() + 1 === new Date(checkInDate).getMonth() + 1 && new Date().getFullYear() === new Date(checkInDate).getFullYear()){
@@ -4518,8 +4528,22 @@ const generateHotelsContent = () =>{
                                     })
                                 })
                             }
+
+                            
+                            
+                            datesErrorDiv.style.display = "none"
+                            
                         }
                         displayingCalendar()
+
+                        window.addEventListener("click", ()=>{
+                            calendar.style.display = "none"
+                            if(datesError){
+                                datesErrorDiv.style.display = "block"
+                            }else{
+                                datesErrorDiv.style.display = "none"
+                            }
+                        })
                     })
                 }
             }else{
@@ -4560,6 +4584,12 @@ const generateHotelsContent = () =>{
 
         window.addEventListener("click", ()=>{
             calendar.style.display = "none"
+
+            if(datesError){
+                datesErrorDiv.style.display = "block"
+            }else{
+                datesErrorDiv.style.display = "none"
+            }
         })
 
         const displayingCalendar = () =>{
@@ -4603,6 +4633,8 @@ const generateHotelsContent = () =>{
                     })
                 })
             }
+
+            datesErrorDiv.style.display = "none"
         }
         displayingCalendar()
     })
@@ -4834,6 +4866,7 @@ const generateHotelsContent = () =>{
             checkInDate = formatDate(checkInDate)
             checkOutDate = "Check-out date"
             
+            datesError = true
             
             allValidDateElements.forEach((element) =>{
                 element.addEventListener("mouseover", (e)=>{
@@ -4874,9 +4907,22 @@ const generateHotelsContent = () =>{
                         firstClick = true 
                         calendar.style.display = "none"
                         guestDropdown.style.display = "flex"
+                        window.addEventListener("click", ()=>{
+                            guestDropdown.style.display = "none"
+
+                            if(guestsError){
+                                guestsErrorDiv.style.display = "block"
+                            }else{
+                                guestsErrorDiv.style.display = "none"
+                            }
+                        })
 
                         checkOutDate = formatDate(checkOutDate)
                         checkOutSpan.textContent = checkOutDate
+
+                        datesError = false
+
+                        guestsErrorDiv.style.display = "none"
                     }
                 }
             }else{
@@ -4902,10 +4948,23 @@ const generateHotelsContent = () =>{
                         firstClick = true 
                         calendar.style.display = "none"
                         guestDropdown.style.display = "flex"
+                        window.addEventListener("click", ()=>{
+                            guestDropdown.style.display = "none"
+
+                            if(guestsError){
+                                guestsErrorDiv.style.display = "block"
+                            }else{
+                                guestsErrorDiv.style.display = "none"
+                            }
+                        })
 
                         checkOutDate = formatDate(checkOutDate)
                         
                         checkOutSpan.textContent = checkOutDate
+
+                        datesError = false
+
+                        guestsErrorDiv.style.display = "none"
                     }
                 }
             }
@@ -5023,7 +5082,15 @@ const generateHotelsContent = () =>{
 
         window.addEventListener("click", ()=>{
             guestDropdown.style.display = "none"
+
+            if(guestsError){
+                guestsErrorDiv.style.display = "block"
+            }else{
+                guestsErrorDiv.style.display = "none"
+            }
         })
+
+        guestsErrorDiv.style.display = "none"
     })
 
     guestDropdown.addEventListener("click", (e)=>{
@@ -5032,6 +5099,12 @@ const generateHotelsContent = () =>{
 
     doneButton.addEventListener("click", ()=>{
         guestDropdown.style.display = "none"
+
+        if(guestsError){
+            guestsErrorDiv.style.display = "block"
+        }else{
+            guestsErrorDiv.style.display = "none"
+        }
     })
 
     //modifying the amount of guests
@@ -5147,6 +5220,19 @@ const generateHotelsContent = () =>{
             if(elementWrapper.children.length == 0){
                 const childAgeWrapper = document.querySelector(".children-age-element")
                 childAgeWrapper.style.display = "none"
+
+                guestsError = false
+            }
+
+            const allEls = document.querySelectorAll("#age-selection-stays")
+            for(let i = 0; i < allEls.length; i++){
+                //console.log(allEls[i])
+                if(allEls[i].options[0].value === ""){
+                    guestsError = true
+                    return
+                }else{
+                    guestsError = false
+                }
             }
         }
     })
@@ -5230,9 +5316,22 @@ const generateHotelsContent = () =>{
                 if(select.value !== "" && select.options[0].value === ""){
                     select.options[0].remove()
                     select.classList.remove("error")
+
+                    const allEls = document.querySelectorAll("#age-selection-stays")
+                    for(let i = 0; i < allEls.length; i++){
+                        //console.log(allEls[i])
+                        if(allEls[i].options[0].value === ""){
+                            guestsError = true
+                            return
+                        }else{
+                            guestsError = false
+                        }
+                    }
                 }
             })
         })
+
+        guestsError = true
     }
 
 
@@ -5642,6 +5741,377 @@ const generateHotelsContent = () =>{
 
         rightBtn.classList.remove("show")
         leftBtn.classList.remove("show")
+    }
+
+    const oneWeekAfter = (userPickedDate) =>{
+        let oneMonthAfterDate = new Date(userPickedDate)
+        oneMonthAfterDate.setDate(oneMonthAfterDate.getDate() + 8)
+    
+        const weekday = oneMonthAfterDate.toLocaleDateString("default", {weekday: "short"})
+        const date = oneMonthAfterDate.getDate()
+        const month = oneMonthAfterDate.toLocaleDateString("default", {month: "short"})
+        const year = oneMonthAfterDate.getFullYear()
+    
+        const fullDate = `${weekday} ${date} ${month} ${year}`
+    
+        return fullDate
+    }
+
+    const checkInOffersDATE = oneWeekAfter(new Date())
+    const checkInOffers = document.querySelector(".stays-offerdates .checkin")
+    const checkOutOffers = document.querySelector(".stays-offerdates .checkout")
+
+    checkInOffers.textContent = checkInOffersDATE
+    checkOutOffers.textContent = oneWeekAfter(checkInOffersDATE)
+
+    //flipping words element
+    const flipper = document.querySelector(".flipper")
+    const spanHeight = flipper.firstElementChild.clientHeight
+    let currentEl = 0
+
+    //clone first element to create visual illusion
+    flipper.appendChild(flipper.children[0].cloneNode(true))
+
+    //each interval iteration we translate the elements up
+    setInterval(() => {
+        currentEl = (currentEl + 1) % flipper.children.length
+        for(let i = 0; i < flipper.children.length; i++){
+            flipper.children[i].style.transition = "300ms ease"
+            flipper.children[i].style.transform = `translateY(-${spanHeight * currentEl}px)`
+        }
+        
+        //when we reach the last child we reset the element back to the first one
+        //and our last is a clone of the first so it creates the illusion of infinite text flipping
+        if(currentEl === flipper.children.length - 1){
+            setTimeout(() => {
+                for(let i = 0; i < flipper.children.length; i++){
+                    flipper.children[i].style.transition = "none"
+                    flipper.children[i].style.transform = `translateY(0)`
+                }
+                currentEl = 0
+            }, 1000);
+        }
+
+        //flipper.style.transform = `translateY(-${spanHeight * currentEl}px)`
+    }, 2000);
+
+
+    //grid layout
+    const mostPopularCities = [
+        {city: "Dubai", img: "./images/popular-dubai.png", country: "UE"},
+        {city: "London", img: "./images/popular-london.png", country: "GB"},
+        {city: "Istanbul", img: "./images/popular-istanbul.png", country: "TR"},
+        {city: "Bangkok", img: "./images/popular-bangkok.jpg", country: "TH"},
+        {city: "Hong Kong", img: "./images/popular-hongkong.png", country: "HK"},
+        {city: "Paris", img: "./images/popular-paris.png", country: "FR"},
+        {city: "New York", img: "./images/popular-newyork.jpg", country: "US"},
+        {city: "Singapore", img: "./images/popular-singapore.png", country: "SG"},
+    ]
+
+    const getUserCountry = async () =>{
+        const city = Intl.DateTimeFormat().resolvedOptions().timeZone.split("/")[1]
+
+        const request = await fetch(`https://api.api-ninjas.com/v1/country?name=${city}`, {
+            headers: {
+                'X-Api-Key': 'HK8cAjtwpCwNkZ/zcSHg8w==PhiE8l5yLKdgG0D8'
+            }  
+        })
+
+        const response = await request.json()
+
+        return response[0]
+    }
+    
+    const allGridItems = document.querySelectorAll(".each-item")
+    const countrytext = document.querySelector(".user-country")
+    const creatingGridLayout = async () =>{
+        const {iso2, name} = await getUserCountry()
+
+        countrytext.textContent = name
+
+        const filteredDestinations = mostPopularCities.filter((city) =>{
+            return city.country !== iso2
+        })
+
+        for(let i = 0; i < allGridItems.length; i++){
+            allGridItems[i].innerHTML = `
+            <span class="grid-text">${filteredDestinations[i].city}</span>
+            <img src="${filteredDestinations[i].img}"/>
+            `
+
+            allGridItems[i].addEventListener("click", ()=>{
+                const queryForAPI = allGridItems[i].firstElementChild.textContent
+            })
+        }        
+    }
+    creatingGridLayout()
+
+
+    //faq
+    const allQuestionEl = document.querySelectorAll(".question-stays")
+    const allSVGs = document.querySelectorAll(".question-stays svg")
+    const allAnswerEl = document.querySelectorAll(".answer-wrap-stays")
+
+    allQuestionEl.forEach((question, i) =>{
+        question.addEventListener("click", ()=>{
+            
+            question.classList.toggle("border")
+            allSVGs[i].classList.toggle("rotate")
+            allAnswerEl[i].classList.toggle("show")
+            
+        })
+    })
+
+    //click event on search button
+    //making the errors
+    let placeError = true
+    let datesError = true
+    let guestsError = false
+
+    const staysErrorDiv = document.querySelector(".stays-place-error")
+    const datesErrorDiv = document.querySelector(".stays-dates-error")
+    const guestsErrorDiv = document.querySelector(".stays-guests-error")
+
+    const searchBtn = document.querySelector(".search-stays")
+    searchBtn.addEventListener("click", ()=>{
+        if(!placeError && !datesError && !guestsError){
+            //setting the skeleton
+            newElemnetsSkeleton()
+
+            //getting the properties for the search
+            const destination = document.querySelector(".stays-span").textContent
+            const checkIn = document.querySelector(".check-in").textContent
+            const checkOut = document.querySelector(".check-out").textContent
+
+            //formatting the dates
+            const formatDateForAPI = (timestring) =>{
+                const year = timestring.getFullYear()
+                const month = String(timestring.getMonth() + 1).padStart(2, "0")
+                const day = String(timestring.getDate()).padStart(2, "0")
+
+                return `${year}-${month}-${day}`
+            }
+
+            const checkInDateFormatted = formatDateForAPI(new Date(checkIn))
+            const checkOutDateFormatted = formatDateForAPI(new Date(checkOut))
+
+            let childrenStr = []
+            if(children > 0){
+                const allSelectEls = document.querySelectorAll("#age-selection-stays")
+                allSelectEls.forEach((select) =>{
+                    childrenStr.push(select.value)
+                })
+
+                childrenStr = childrenStr.join(",")
+            }else{
+                childrenStr = ""
+            }
+            
+            //console.log(checkInDateFormatted, checkOutDateFormatted, destination, adults, children, childrenStr)
+
+            //get a response, call the display function
+            const fetchHotelData = async () =>{
+                const API_KEY = `c01897a06f765f96b954be7d64923e3071cebcc57c0e30d30ed2df4d9340b5cd`
+                const request = await fetch(`https://serpapi.com/search.json?engine=google_hotels&q=${destination}&currency=EUR&check_in_date=${checkInDateFormatted}&check_out_date=${checkOutDateFormatted}&adults=${adults}&children=${children}${childrenStr ? "&children_ages="+childrenStr : ""}&api_key=${API_KEY}`)
+
+                const response = await request.json()
+
+                console.log(response)
+            }
+            fetchHotelData()
+        }else{
+            if(placeError){
+                staysErrorDiv.style.display = "block"
+            }
+
+            if(datesError){
+                datesErrorDiv.style.display = "block"
+            }
+
+            if(guestsError){
+                guestsErrorDiv.style.display = "block"
+            }
+        }
+    })
+
+    //quick skeleton loader and then present the real thing
+    const newElemnetsSkeleton = () =>{
+        const sectionTitle = document.querySelector(".head-search-outer")
+        const initialStaysContent = document.querySelector(".initial-stays-content")
+    
+        sectionTitle.innerHTML = ``
+        initialStaysContent.innerHTML = `
+        <div class="stays-content-wrapper">
+            
+            <div class="stays-filters-wrapper">
+                <div class="stays-filter"> <div class="stays-long"></div> <div class="stays-short"></div> </div>
+                <div class="stays-filter"> <div class="stays-long"></div> <div class="stays-short"></div> </div>
+                <div class="stays-filter"> <div class="stays-long"></div> <div class="stays-short"></div> </div>
+                <div class="stays-filter"> <div class="stays-long"></div> <div class="stays-short"></div> </div>
+                <div class="stays-filter"> <div class="stays-long"></div> <div class="stays-short"></div> </div>
+                <div class="stays-filter"> <div class="stays-long"></div> <div class="stays-short"></div> </div>
+                <div class="stays-filter"> <div class="stays-long"></div> <div class="stays-short"></div> </div>
+                <div class="stays-filter"> <div class="stays-long"></div> <div class="stays-short"></div> </div>
+                <div class="stays-filter"> <div class="stays-long"></div> <div class="stays-short"></div> </div>
+                <div class="stays-filter"> <div class="stays-long"></div> <div class="stays-short"></div> </div>
+                <div class="stays-filter"> <div class="stays-long"></div> <div class="stays-short"></div> </div>
+            </div>
+    
+            <div class="result-stays-wrapper">
+                <div class="all-stays">
+                    <div class="result-hotel">
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="square"></div>
+                            <div class="medium"></div>
+                        </div>
+                    </div>
+                    <div class="result-hotel">
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="square"></div>
+                            <div class="medium"></div>
+                        </div>
+                    </div>
+                    <div class="result-hotel">
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="square"></div>
+                            <div class="medium"></div>
+                        </div>
+                    </div>
+                    <div class="result-hotel">
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="square"></div>
+                            <div class="medium"></div>
+                        </div>
+                    </div>
+                    <div class="result-hotel">
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="square"></div>
+                            <div class="medium"></div>
+                        </div>
+                    </div>
+                    <div class="result-hotel">
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="square"></div>
+                            <div class="medium"></div>
+                        </div>
+                    </div>
+                    <div class="result-hotel">
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="square"></div>
+                            <div class="medium"></div>
+                        </div>
+                    </div>
+                    <div class="result-hotel">
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="long"></div>
+                            <div class="short"></div>
+                        </div>
+                        <div>
+                            <div class="square"></div>
+                            <div class="medium"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+        ` 
+    }
+
+    //display function
+    const displayHotels = (data) =>{
+
     }
 }
 generateHotelsContent()
